@@ -16,3 +16,19 @@ take a look at: https://github.zhaw.ch/ADLS-Digital-Health/DSHEAL-FS25/blob/main
 ├── results/               # Logs, confusion matrices, performance charts
 └── LICENSE                # License file
 ```
+
+
+# Environment Managment
+## 1. Setting up the Environment
+To create the Conda environment from the env.yaml file, run the following command:
+```
+conda env create --file env.yaml
+conda activate DSHEAL_proj1_GaMo
+```
+## 2. Adding a New Package
+Open the env.yaml file and add the new package under the dependencies section. \
+Update the environment without recreating it:
+```
+conda env update --file env.yaml --prune
+```
+
