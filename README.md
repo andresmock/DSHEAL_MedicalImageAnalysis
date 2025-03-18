@@ -1,5 +1,5 @@
 # DSHEAL_project_FS25_GaMo
-Medical Image Analysis
+Medical Image Analysis - Malaria Detection Using Blood Smear Images
 
 # Task
 take a look at: https://github.zhaw.ch/ADLS-Digital-Health/DSHEAL-FS25/blob/main/project/assignment.md

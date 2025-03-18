@@ -1,0 +1,143 @@
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import sys
+import os
+import wandb
+import argparse  
+from tqdm import tqdm
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Trains MalariaNet with PyTorch and W&B")
+    parser.add_argument("--num_epochs", type=int, default=10, help="Number of Epochs")
+    parser.add_argument("--lr", type=float, default=0.001, help="Learning Rate")
+    parser.add_argument("--momentum", type=float, default=0.9, help="Momentum for SGD")
+    return parser.parse_args()
+
+def setup_wandb():
+    WANDB_API_KEY = None
+    login_file = os.path.join(os.path.dirname(__file__), ".wandb_login")
+
+    if os.path.exists(login_file):
+        with open(login_file, "r") as f:
+            for line in f:
+                if line.startswith("WANDB_API_KEY="):
+                    WANDB_API_KEY = line.strip().split("=")[1]
+                    break
+
+    wandb_mode = "online" if WANDB_API_KEY else "offline"
+
+    if WANDB_API_KEY:
+        os.environ["WANDB_API_KEY"] = WANDB_API_KEY
+        wandb.login()
+    else:
+        print("⚠️ No W&B API-Key found! Training runs without W&B-Logging.")
+
+    # W&B-Run starten
+    user = os.getenv("USERNAME") or os.getenv("USER") or "unknown"
+    wandb.init(
+        project="DSHEAL_pro1_FS25_GaMo",
+        entity="mockand1-ba",
+        name=f"MalariaNet_{user}",
+        mode=wandb_mode
+    )
+
+    print(f"✅ W&B-Logging startet for user: {user} (Mode: {wandb_mode})")
+    return wandb_mode
+
+def train_model(args):
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # Basisverzeichnis
+    DATA_DIR = os.path.join(BASE_DIR, "data")
+    MODELS_DIR = os.path.join(BASE_DIR, "models")
+
+    sys.path.append(DATA_DIR)
+    sys.path.append(MODELS_DIR)
+
+    from data_loader import train_loader, val_loader
+    from malaria_model_1 import MalariaNet
+
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(f"runs with: {device}")
+
+    model = MalariaNet(num_classes=2).to(device)
+    criterion = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
+
+    # Best Model Tracking
+    best_val_acc = 0.0  # Höchste Validierungsgenauigkeit bisher
+    best_model_path = os.path.join(MODELS_DIR, "best_malaria_model.pth")
+
+    # Training loop with tqdm & W&B logging
+    for epoch in range(args.num_epochs):
+        model.train()
+        running_loss = 0.0
+        correct = 0
+        total = 0
+
+        progress_bar = tqdm(enumerate(train_loader), total=len(train_loader), desc=f"🟢 Epoch {epoch+1}/{args.num_epochs}")
+
+        for batch_index, (images, labels) in progress_bar:
+            images, labels = images.to(device), labels.to(device)
+
+            outputs = model(images)
+            loss = criterion(outputs, labels)
+
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+
+            running_loss += loss.item()
+            _, predicted = torch.max(outputs, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+
+            progress_bar.set_postfix(loss=f"{loss.item():.4f}", acc=f"{100 * correct / total:.2f}%")
+            wandb.log({"Train Loss": loss.item(), "Train Accuracy": 100 * correct / total})
+
+        # Validation
+        model.eval()
+        val_correct = 0
+        val_total = 0
+        with torch.no_grad():
+            for val_images, val_labels in val_loader:
+                val_images, val_labels = val_images.to(device), val_labels.to(device)
+                val_outputs = model(val_images)
+                _, val_predicted = torch.max(val_outputs, 1)
+                val_total += val_labels.size(0)
+                val_correct += (val_predicted == val_labels).sum().item()
+
+        val_accuracy = val_correct / val_total
+        train_accuracy = correct / total
+
+        wandb.log({
+            "Epoch": epoch+1,
+            "Train Accuracy": train_accuracy,
+            "Validation Accuracy": val_accuracy,
+            "Loss": running_loss / (batch_index+1)
+        })
+
+        print(f"✅ Epoch {epoch+1}/{args.num_epochs} | Loss: {running_loss/(batch_index+1):.4f} | Train Acc: {train_accuracy:.4f} | Val Acc: {val_accuracy:.4f}")
+
+        # **Speichere das Modell nach jeder Epoche**
+        epoch_model_path = os.path.join(MODELS_DIR, f"malaria_model_epoch{epoch+1}.pth")
+        torch.save(model.state_dict(), epoch_model_path)
+        print(f"💾 Model saved: {epoch_model_path}")
+
+        # **Speichere NUR das beste Modell**
+        if val_accuracy > best_val_acc:
+            best_val_acc = val_accuracy
+            torch.save(model.state_dict(), best_model_path)
+            print(f"🏆 Best model updated! (Validation Accuracy: {best_val_acc:.4f})")
+
+    print(f"🎉 Training finished! best model saved: {best_model_path}")
+
+    MODEL_PATH = os.path.join(MODELS_DIR, f"malaria_model_{args.num_epochs}epochs.pth")
+    torch.save(model.state_dict(), MODEL_PATH)
+    print(f"🎉 Model saved: {MODEL_PATH}")
+
+    wandb.finish()
+
+if __name__ == "__main__":
+    args = parse_args()
+    setup_wandb()
+    train_model(args)
