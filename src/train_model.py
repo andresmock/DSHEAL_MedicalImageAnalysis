@@ -38,11 +38,13 @@ def setup_wandb():
     wandb.init(
         project="DSHEAL_pro1_FS25_GaMo",
         entity="mockand1-ba",
-        name=f"MalariaNet_{user}",
+        # name=f"MalariaNet_{user}_{run_id}",
         mode=wandb_mode
     )
 
     run_id = wandb.run.id if wandb.run else f"offline-{user}"
+    wandb.run.name = f"MalariaNet_{user}_{run_id}"
+
     print(f"✅ W&B-Logging startet for user: {user} (Mode: {wandb_mode})")
     return wandb_mode, run_id
 
@@ -96,20 +98,27 @@ def train_model(args, run_id):
             correct += (predicted == labels).sum().item()
 
             progress_bar.set_postfix(loss=f"{loss.item():.4f}", acc=f"{100 * correct / total:.2f}%")
-            wandb.log({"Train Loss": loss.item()})
+            # wandb.log({"Train Loss": loss.item()})
 
         # Validation
         model.eval()
         val_correct = 0
         val_total = 0
+        val_running_loss = 0.0
+
         with torch.no_grad():
             for val_images, val_labels in val_loader:
                 val_images, val_labels = val_images.to(device), val_labels.to(device)
                 val_outputs = model(val_images)
+                loss = criterion(val_outputs, val_labels)
+                val_running_loss += loss.item()
+
                 _, val_predicted = torch.max(val_outputs, 1)
                 val_total += val_labels.size(0)
                 val_correct += (val_predicted == val_labels).sum().item()
 
+        train_loss = running_loss / total
+        val_loss = val_running_loss / val_total
         val_accuracy = val_correct / val_total
         train_accuracy = correct / total
 
@@ -117,10 +126,11 @@ def train_model(args, run_id):
             "Epoch": epoch+1,
             "Train Accuracy": train_accuracy,
             "Validation Accuracy": val_accuracy,
-            "Loss": running_loss / (batch_index+1)
+            "Train Loss (Epoch Avg)": train_loss,
+            "Validation Loss": val_loss
         })
 
-        print(f"✅ Epoch {epoch+1}/{args.num_epochs} | Loss: {running_loss/(batch_index+1):.4f} | Train Acc: {train_accuracy:.4f} | Val Acc: {val_accuracy:.4f}")
+        print(f"✅ Epoch {epoch+1}/{args.num_epochs} | Loss: {running_loss/total:.4f} | Train Acc: {train_accuracy:.4f} | Val Acc: {val_accuracy:.4f}")
 
         # **Speichere das Modell nach jeder Epoche**
         epoch_model_path = os.path.join(RUN_DIR, f"malaria_model_epoch{epoch+1}.pth")

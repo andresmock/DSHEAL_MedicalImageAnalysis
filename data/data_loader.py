@@ -17,12 +17,18 @@ data_dir = get_data_path()
 print(f"Used data path: {data_dir}")
 
 # Daten-Transformationen 
-transform = transforms.Compose([
+train_transform = transforms.Compose([
     transforms.Resize((128, 128)),           # Bilder auf 128x128 skalieren
     transforms.RandomHorizontalFlip(p=0.5),  # 50% Wahrscheinlichkeit für horizontales Spiegeln
     transforms.RandomVerticalFlip(p=0.5),    # 50% Wahrscheinlichkeit für vertikales Spiegeln
     transforms.RandomRotation(degrees=15),   # Zufällige Drehung um bis zu 15 Grad
     transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1),  # Helligkeit, Kontrast, Sättigung variieren
+    transforms.ToTensor(),                   # In PyTorch-Tensor umwandeln
+    transforms.Normalize((0.5,), (0.5,))     # Normalisieren auf -1 bis 1
+])
+
+val_test_transform = transforms.Compose([
+    transforms.Resize((128, 128)),           # Bilder auf 128x128 skalieren
     transforms.ToTensor(),                   # In PyTorch-Tensor umwandeln
     transforms.Normalize((0.5,), (0.5,))     # Normalisieren auf -1 bis 1
 ])
@@ -35,9 +41,9 @@ Die Reihenfolge der Ordner bestimmt die Label-Zuordnung
 (Uninfected/) wird 1
 PyTorch's ImageFolder() ordnet die Labels alphabetisch nach den Ordnernamen
 """
-train_dataset = datasets.ImageFolder(root=os.path.join(data_dir, "train"), transform=transform)
-val_dataset = datasets.ImageFolder(root=os.path.join(data_dir, "val"), transform=transform)
-test_dataset = datasets.ImageFolder(root=os.path.join(data_dir, "test"), transform=transform)
+train_dataset = datasets.ImageFolder(root=os.path.join(data_dir, "train"), transform=train_transform)
+val_dataset = datasets.ImageFolder(root=os.path.join(data_dir, "val"), transform=val_test_transform)
+test_dataset = datasets.ImageFolder(root=os.path.join(data_dir, "test"), transform=val_test_transform)
 
 # DataLoader für Batches
 train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
