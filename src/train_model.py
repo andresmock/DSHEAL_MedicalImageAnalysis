@@ -42,13 +42,16 @@ def setup_wandb():
         mode=wandb_mode
     )
 
+    run_id = wandb.run.id if wandb.run else f"offline-{user}"
     print(f"✅ W&B-Logging startet for user: {user} (Mode: {wandb_mode})")
-    return wandb_mode
+    return wandb_mode, run_id
 
-def train_model(args):
+def train_model(args, run_id):
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # Basisverzeichnis
     DATA_DIR = os.path.join(BASE_DIR, "data")
     MODELS_DIR = os.path.join(BASE_DIR, "models")
+    RUN_DIR = os.path.join(MODELS_DIR, f"run-{run_id}")
+    os.makedirs(RUN_DIR, exist_ok=True)
 
     sys.path.append(DATA_DIR)
     sys.path.append(MODELS_DIR)
@@ -65,7 +68,8 @@ def train_model(args):
 
     # Best Model Tracking
     best_val_acc = 0.0  # Höchste Validierungsgenauigkeit bisher
-    best_model_path = os.path.join(MODELS_DIR, "best_malaria_model.pth")
+    best_model_path = None
+    # best_model_path = os.path.join(MODELS_DIR, "best_malaria_model.pth")
 
     # Training loop with tqdm & W&B logging
     for epoch in range(args.num_epochs):
@@ -92,7 +96,7 @@ def train_model(args):
             correct += (predicted == labels).sum().item()
 
             progress_bar.set_postfix(loss=f"{loss.item():.4f}", acc=f"{100 * correct / total:.2f}%")
-            wandb.log({"Train Loss": loss.item(), "Train Accuracy": 100 * correct / total})
+            wandb.log({"Train Loss": loss.item()})
 
         # Validation
         model.eval()
@@ -119,19 +123,24 @@ def train_model(args):
         print(f"✅ Epoch {epoch+1}/{args.num_epochs} | Loss: {running_loss/(batch_index+1):.4f} | Train Acc: {train_accuracy:.4f} | Val Acc: {val_accuracy:.4f}")
 
         # **Speichere das Modell nach jeder Epoche**
-        epoch_model_path = os.path.join(MODELS_DIR, f"malaria_model_epoch{epoch+1}.pth")
+        epoch_model_path = os.path.join(RUN_DIR, f"malaria_model_epoch{epoch+1}.pth")
         torch.save(model.state_dict(), epoch_model_path)
         print(f"💾 Model saved: {epoch_model_path}")
 
         # **Speichere NUR das beste Modell**
         if val_accuracy > best_val_acc:
+            if best_model_path and os.path.exists(best_model_path):
+                os.remove(best_model_path)
+                print(f"🗑️ Deleted old best model: {best_model_path}")
+
             best_val_acc = val_accuracy
+            best_model_path = os.path.join(MODELS_DIR, f"best_malaria_model_{run_id}_epoch{epoch+1}.pth")
             torch.save(model.state_dict(), best_model_path)
             print(f"🏆 Best model updated! (Validation Accuracy: {best_val_acc:.4f})")
 
     print(f"🎉 Training finished! best model saved: {best_model_path}")
 
-    MODEL_PATH = os.path.join(MODELS_DIR, f"malaria_model_{args.num_epochs}epochs.pth")
+    MODEL_PATH = os.path.join(RUN_DIR, f"malaria_model_{args.num_epochs}epochs.pth")
     torch.save(model.state_dict(), MODEL_PATH)
     print(f"🎉 Model saved: {MODEL_PATH}")
 
@@ -139,5 +148,5 @@ def train_model(args):
 
 if __name__ == "__main__":
     args = parse_args()
-    setup_wandb()
-    train_model(args)
+    wandb_mode, run_id = setup_wandb()
+    train_model(args, run_id)
