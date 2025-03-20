@@ -21,16 +21,24 @@ train_transform = transforms.Compose([
     transforms.Resize((128, 128)),           # Bilder auf 128x128 skalieren
     transforms.RandomHorizontalFlip(p=0.5),  # 50% Wahrscheinlichkeit für horizontales Spiegeln
     transforms.RandomVerticalFlip(p=0.5),    # 50% Wahrscheinlichkeit für vertikales Spiegeln
-    transforms.RandomRotation(degrees=15),   # Zufällige Drehung um bis zu 15 Grad
+    transforms.RandomRotation(degrees=(-180, 180)),   # Randomly rotate the image
     transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1),  # Helligkeit, Kontrast, Sättigung variieren
-    transforms.ToTensor(),                   # In PyTorch-Tensor umwandeln
-    transforms.Normalize((0.5,), (0.5,))     # Normalisieren auf -1 bis 1
+    #transforms.Grayscale(num_output_channels=1), # COnvert the image to grayscale
+    transforms.ToTensor(),                        # In PyTorch-Tensor umwandeln
+    transforms.Normalize(mean=[0.529, 0.424, 0.453],
+                          std=[0.332, 0.268, 0.282])     # Normalisieren auf -1 bis 1
+
+
+
 ])
 
 val_test_transform = transforms.Compose([
-    transforms.Resize((128, 128)),           # Bilder auf 128x128 skalieren
-    transforms.ToTensor(),                   # In PyTorch-Tensor umwandeln
-    transforms.Normalize((0.5,), (0.5,))     # Normalisieren auf -1 bis 1
+
+    transforms.Resize((128, 128)),                  # Bilder auf 128x128 skalieren
+    transforms.ToTensor(),                           # In PyTorch-Tensor umwandeln
+    transforms.Normalize(mean=[0.529, 0.424, 0.453],
+                          std=[0.332, 0.268, 0.282])  # Normalisieren auf -1 bis 1
+
 ])
 
 # Datasets für Training, Validierung und Test
@@ -49,6 +57,10 @@ test_dataset = datasets.ImageFolder(root=os.path.join(data_dir, "test"), transfo
 train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
 val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False)
 test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)
+
+train_dataset_raw = datasets.ImageFolder(root=os.path.join(data_dir, "train"), transform=None)
+val_dataset_raw = datasets.ImageFolder(root=os.path.join(data_dir, "val"), transform=None)
+test_dataset_raw = datasets.ImageFolder(root=os.path.join(data_dir, "test"), transform=None)
 
 if __name__ == "__main__":
     # Test: Anzahl Bilder pro Datensatz
