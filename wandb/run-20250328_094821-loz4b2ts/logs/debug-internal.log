@@ -1,0 +1,16 @@
+{"time":"2025-03-28T09:48:21.1616656+01:00","level":"INFO","msg":"stream: starting","core version":"0.19.8","symlink path":"C:\\Users\\andre\\Desktop\\git_repository_zhaw\\DSHEAL_project_FS25_GaMo\\wandb\\run-20250328_094821-loz4b2ts\\logs\\debug-core.log"}
+{"time":"2025-03-28T09:48:21.4554716+01:00","level":"INFO","msg":"created new stream","id":"loz4b2ts"}
+{"time":"2025-03-28T09:48:21.4554716+01:00","level":"INFO","msg":"stream: started","id":"loz4b2ts"}
+{"time":"2025-03-28T09:48:21.4560333+01:00","level":"INFO","msg":"sender: started","stream_id":"loz4b2ts"}
+{"time":"2025-03-28T09:48:21.4560333+01:00","level":"INFO","msg":"writer: Do: started","stream_id":"loz4b2ts"}
+{"time":"2025-03-28T09:48:21.4566344+01:00","level":"INFO","msg":"handler: started","stream_id":"loz4b2ts"}
+{"time":"2025-03-28T09:48:21.8681631+01:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-03-28T10:38:23.7414891+01:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-03-28T10:38:23.7427699+01:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-03-28T10:38:24.6068435+01:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-03-28T10:38:24.7642009+01:00","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading history steps 9-9, summary, console lines 46-50","runtime_seconds":0.1567608}],"total_operations":1}}
+{"time":"2025-03-28T10:38:24.8196814+01:00","level":"INFO","msg":"stream: closing","id":"loz4b2ts"}
+{"time":"2025-03-28T10:38:24.8196814+01:00","level":"INFO","msg":"handler: closed","stream_id":"loz4b2ts"}
+{"time":"2025-03-28T10:38:24.8196814+01:00","level":"INFO","msg":"sender: closed","stream_id":"loz4b2ts"}
+{"time":"2025-03-28T10:38:24.8196814+01:00","level":"INFO","msg":"writer: Close: closed","stream_id":"loz4b2ts"}
+{"time":"2025-03-28T10:38:24.8196814+01:00","level":"INFO","msg":"stream: closed","id":"loz4b2ts"}

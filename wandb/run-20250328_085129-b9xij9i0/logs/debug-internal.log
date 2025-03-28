@@ -1,0 +1,17 @@
+{"time":"2025-03-28T08:51:29.5574644+01:00","level":"INFO","msg":"stream: starting","core version":"0.19.8","symlink path":"C:\\Users\\andre\\Desktop\\git_repository_zhaw\\DSHEAL_project_FS25_GaMo\\wandb\\run-20250328_085129-b9xij9i0\\logs\\debug-core.log"}
+{"time":"2025-03-28T08:51:29.6838663+01:00","level":"INFO","msg":"created new stream","id":"b9xij9i0"}
+{"time":"2025-03-28T08:51:29.6844595+01:00","level":"INFO","msg":"handler: started","stream_id":"b9xij9i0"}
+{"time":"2025-03-28T08:51:29.6844595+01:00","level":"INFO","msg":"writer: Do: started","stream_id":"b9xij9i0"}
+{"time":"2025-03-28T08:51:29.6844595+01:00","level":"INFO","msg":"stream: started","id":"b9xij9i0"}
+{"time":"2025-03-28T08:51:29.6844595+01:00","level":"INFO","msg":"sender: started","stream_id":"b9xij9i0"}
+{"time":"2025-03-28T08:51:30.0210737+01:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-03-28T08:52:00.1423275+01:00","level":"ERROR","msg":"runconsolelogs: failed to write to file: truncate C:\\Users\\andre\\Desktop\\git_repository_zhaw\\DSHEAL_project_FS25_GaMo\\wandb\\run-20250328_085129-b9xij9i0\\files\\output.log: The requested operation cannot be performed on a file with a user-mapped section open."}
+{"time":"2025-03-28T09:25:06.968611+01:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-03-28T09:25:06.9691341+01:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-03-28T09:25:07.7222177+01:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-03-28T09:25:07.9590626+01:00","level":"INFO","msg":"handler: operation stats","stats":{}}
+{"time":"2025-03-28T09:25:07.9815744+01:00","level":"INFO","msg":"stream: closing","id":"b9xij9i0"}
+{"time":"2025-03-28T09:25:07.9815744+01:00","level":"INFO","msg":"handler: closed","stream_id":"b9xij9i0"}
+{"time":"2025-03-28T09:25:07.9815744+01:00","level":"INFO","msg":"sender: closed","stream_id":"b9xij9i0"}
+{"time":"2025-03-28T09:25:07.9815744+01:00","level":"INFO","msg":"writer: Close: closed","stream_id":"b9xij9i0"}
+{"time":"2025-03-28T09:25:07.9828454+01:00","level":"INFO","msg":"stream: closed","id":"b9xij9i0"}

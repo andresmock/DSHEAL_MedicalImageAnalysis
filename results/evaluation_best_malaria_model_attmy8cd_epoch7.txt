@@ -1,0 +1,19 @@
+Evaluation Results for model: best_malaria_model_attmy8cd_epoch7
+
+=== wandb ARGS ===
+--aug_level: basic
+
+=== Classification Report ===
+              precision    recall  f1-score   support
+
+  Uninfected     0.9640    0.9339    0.9487      1377
+ Parasitized     0.9360    0.9652    0.9503      1378
+
+    accuracy                         0.9495      2755
+   macro avg     0.9500    0.9495    0.9495      2755
+weighted avg     0.9500    0.9495    0.9495      2755
+
+
+=== Confusion Matrix ===
+[[1286   91]
+ [  48 1330]]

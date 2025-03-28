@@ -52,6 +52,30 @@ val_test_transform = transforms.Compose([
 
 ])
 
+def create_dataloaders(aug_level="basic", batch_size=32):
+    # Erstelle das passende Transform für das Training
+    train_dataset = datasets.ImageFolder(
+        root=os.path.join(data_dir, "train"),
+        transform=get_train_transform(aug_level)  # <-- nutze aug_level!
+    )
+    
+    # Validation & Test unverändert
+    val_dataset = datasets.ImageFolder(
+        root=os.path.join(data_dir, "val"),
+        transform=val_test_transform
+    )
+    test_dataset = datasets.ImageFolder(
+        root=os.path.join(data_dir, "test"),
+        transform=val_test_transform
+    )
+
+    # Erstelle jetzt die DataLoader
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
+
+    return train_loader, val_loader, test_loader
+
 # Datasets für Training, Validierung und Test
 """
 Beim Laden mit datasets.ImageFolder() erkennt PyTorch automatisch die Unterordner als Klassen.
@@ -59,6 +83,8 @@ Die Reihenfolge der Ordner bestimmt die Label-Zuordnung
 (Parasitized/) wird 0
 (Uninfected/) wird 1
 PyTorch's ImageFolder() ordnet die Labels alphabetisch nach den Ordnernamen
+"""
+
 """
 train_dataset = datasets.ImageFolder(root=os.path.join(data_dir, "train"), transform=get_train_transform("basic"))
 val_dataset = datasets.ImageFolder(root=os.path.join(data_dir, "val"), transform=val_test_transform)
@@ -68,6 +94,7 @@ test_dataset = datasets.ImageFolder(root=os.path.join(data_dir, "test"), transfo
 train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
 val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False)
 test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)
+"""
 
 train_dataset_raw = datasets.ImageFolder(root=os.path.join(data_dir, "train"), transform=None)
 val_dataset_raw = datasets.ImageFolder(root=os.path.join(data_dir, "val"), transform=None)

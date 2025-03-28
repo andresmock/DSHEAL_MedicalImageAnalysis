@@ -1,0 +1,51 @@
+✅ W&B-Logging startet for user: andre (Mode: online)
+Used data path: C:\ZHAW_local\semester_6_local\DS in Health\project_work\data
+runs with: cpu
+🟢 Epoch 1/10: 100%|████████████████████████████████████████| 689/689 [03:08<00:00,  3.66it/s, acc=68.38%, loss=0.5525]
+✅ Epoch 1/10 | Loss: 0.0187 | Train Acc: 0.6838 | Val Acc: 0.7060
+💾 Model saved: C:\Users\andre\Desktop\git_repository_zhaw\DSHEAL_project_FS25_GaMo\models\run-attmy8cd\malaria_model_epoch1.pth
+🏆 Best model updated! (Validation Accuracy: 0.7060)
+🟢 Epoch 2/10: 100%|████████████████████████████████████████| 689/689 [03:13<00:00,  3.57it/s, acc=77.29%, loss=0.4338]
+✅ Epoch 2/10 | Loss: 0.0155 | Train Acc: 0.7729 | Val Acc: 0.8799
+💾 Model saved: C:\Users\andre\Desktop\git_repository_zhaw\DSHEAL_project_FS25_GaMo\models\run-attmy8cd\malaria_model_epoch2.pth
+🗑️ Deleted old best model: C:\Users\andre\Desktop\git_repository_zhaw\DSHEAL_project_FS25_GaMo\models\best_malaria_model_attmy8cd_epoch1.pth
+🏆 Best model updated! (Validation Accuracy: 0.8799)
+🟢 Epoch 3/10: 100%|████████████████████████████████████████| 689/689 [03:41<00:00,  3.12it/s, acc=90.75%, loss=0.2332]
+✅ Epoch 3/10 | Loss: 0.0083 | Train Acc: 0.9075 | Val Acc: 0.9376
+💾 Model saved: C:\Users\andre\Desktop\git_repository_zhaw\DSHEAL_project_FS25_GaMo\models\run-attmy8cd\malaria_model_epoch3.pth
+🗑️ Deleted old best model: C:\Users\andre\Desktop\git_repository_zhaw\DSHEAL_project_FS25_GaMo\models\best_malaria_model_attmy8cd_epoch2.pth
+🏆 Best model updated! (Validation Accuracy: 0.9376)
+🟢 Epoch 4/10: 100%|████████████████████████████████████████| 689/689 [02:54<00:00,  3.94it/s, acc=93.67%, loss=0.1342]
+✅ Epoch 4/10 | Loss: 0.0060 | Train Acc: 0.9367 | Val Acc: 0.9506
+💾 Model saved: C:\Users\andre\Desktop\git_repository_zhaw\DSHEAL_project_FS25_GaMo\models\run-attmy8cd\malaria_model_epoch4.pth
+🗑️ Deleted old best model: C:\Users\andre\Desktop\git_repository_zhaw\DSHEAL_project_FS25_GaMo\models\best_malaria_model_attmy8cd_epoch3.pth
+🏆 Best model updated! (Validation Accuracy: 0.9506)
+🟢 Epoch 5/10: 100%|████████████████████████████████████████| 689/689 [02:57<00:00,  3.88it/s, acc=94.37%, loss=0.1995]
+✅ Epoch 5/10 | Loss: 0.0054 | Train Acc: 0.9437 | Val Acc: 0.9554
+💾 Model saved: C:\Users\andre\Desktop\git_repository_zhaw\DSHEAL_project_FS25_GaMo\models\run-attmy8cd\malaria_model_epoch5.pth
+🗑️ Deleted old best model: C:\Users\andre\Desktop\git_repository_zhaw\DSHEAL_project_FS25_GaMo\models\best_malaria_model_attmy8cd_epoch4.pth
+🏆 Best model updated! (Validation Accuracy: 0.9554)
+🟢 Epoch 6/10: 100%|████████████████████████████████████████| 689/689 [02:59<00:00,  3.84it/s, acc=94.53%, loss=0.1632]
+✅ Epoch 6/10 | Loss: 0.0052 | Train Acc: 0.9453 | Val Acc: 0.9550
+💾 Model saved: C:\Users\andre\Desktop\git_repository_zhaw\DSHEAL_project_FS25_GaMo\models\run-attmy8cd\malaria_model_epoch6.pth
+⏳ No improvement for 1 epochs.
+🟢 Epoch 7/10: 100%|████████████████████████████████████████| 689/689 [04:21<00:00,  2.63it/s, acc=94.96%, loss=0.2019]
+✅ Epoch 7/10 | Loss: 0.0049 | Train Acc: 0.9496 | Val Acc: 0.9564
+💾 Model saved: C:\Users\andre\Desktop\git_repository_zhaw\DSHEAL_project_FS25_GaMo\models\run-attmy8cd\malaria_model_epoch7.pth
+🗑️ Deleted old best model: C:\Users\andre\Desktop\git_repository_zhaw\DSHEAL_project_FS25_GaMo\models\best_malaria_model_attmy8cd_epoch5.pth
+🏆 Best model updated! (Validation Accuracy: 0.9564)
+🟢 Epoch 8/10: 100%|████████████████████████████████████████| 689/689 [05:20<00:00,  2.15it/s, acc=95.02%, loss=0.2332]
+✅ Epoch 8/10 | Loss: 0.0048 | Train Acc: 0.9502 | Val Acc: 0.9517
+💾 Model saved: C:\Users\andre\Desktop\git_repository_zhaw\DSHEAL_project_FS25_GaMo\models\run-attmy8cd\malaria_model_epoch8.pth
+⏳ No improvement for 1 epochs.
+🟢 Epoch 9/10: 100%|████████████████████████████████████████| 689/689 [04:53<00:00,  2.35it/s, acc=95.03%, loss=0.0815]
+✅ Epoch 9/10 | Loss: 0.0047 | Train Acc: 0.9503 | Val Acc: 0.9543
+💾 Model saved: C:\Users\andre\Desktop\git_repository_zhaw\DSHEAL_project_FS25_GaMo\models\run-attmy8cd\malaria_model_epoch9.pth
+⏳ No improvement for 2 epochs.
+🟢 Epoch 10/10: 100%|███████████████████████████████████████| 689/689 [04:41<00:00,  2.45it/s, acc=95.16%, loss=0.3208]
+✅ Epoch 10/10 | Loss: 0.0046 | Train Acc: 0.9516 | Val Acc: 0.9495
+💾 Model saved: C:\Users\andre\Desktop\git_repository_zhaw\DSHEAL_project_FS25_GaMo\models\run-attmy8cd\malaria_model_epoch10.pth
+⏳ No improvement for 3 epochs.
+⛔ Early stopping triggered after 10 epochs.
+🎉 Training finished! best model saved: C:\Users\andre\Desktop\git_repository_zhaw\DSHEAL_project_FS25_GaMo\models\best_malaria_model_attmy8cd_epoch7.pth
+🎉 Model saved: C:\Users\andre\Desktop\git_repository_zhaw\DSHEAL_project_FS25_GaMo\models\run-attmy8cd\malaria_model_10epochs.pth

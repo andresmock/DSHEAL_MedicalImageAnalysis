@@ -1,0 +1,16 @@
+{"time":"2025-03-28T08:20:17.5768282+01:00","level":"INFO","msg":"stream: starting","core version":"0.19.8","symlink path":"C:\\Users\\andre\\Desktop\\git_repository_zhaw\\DSHEAL_project_FS25_GaMo\\wandb\\run-20250328_082017-dxtn88y4\\logs\\debug-core.log"}
+{"time":"2025-03-28T08:20:17.7032506+01:00","level":"INFO","msg":"created new stream","id":"dxtn88y4"}
+{"time":"2025-03-28T08:20:17.7038109+01:00","level":"INFO","msg":"stream: started","id":"dxtn88y4"}
+{"time":"2025-03-28T08:20:17.7038109+01:00","level":"INFO","msg":"handler: started","stream_id":"dxtn88y4"}
+{"time":"2025-03-28T08:20:17.7038109+01:00","level":"INFO","msg":"sender: started","stream_id":"dxtn88y4"}
+{"time":"2025-03-28T08:20:17.7038109+01:00","level":"INFO","msg":"writer: Do: started","stream_id":"dxtn88y4"}
+{"time":"2025-03-28T08:20:18.0043017+01:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-03-28T08:45:25.0991198+01:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-03-28T08:45:25.1006985+01:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-03-28T08:45:26.1262857+01:00","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading output.log","runtime_seconds":0.6451735,"progress":"5.4KB/5.4KB"},{"desc":"uploading config.yaml","runtime_seconds":0.4771819,"progress":"620B/620B"}],"total_operations":2}}
+{"time":"2025-03-28T08:45:26.2374699+01:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-03-28T08:45:26.4173688+01:00","level":"INFO","msg":"stream: closing","id":"dxtn88y4"}
+{"time":"2025-03-28T08:45:26.4173688+01:00","level":"INFO","msg":"sender: closed","stream_id":"dxtn88y4"}
+{"time":"2025-03-28T08:45:26.4173688+01:00","level":"INFO","msg":"handler: closed","stream_id":"dxtn88y4"}
+{"time":"2025-03-28T08:45:26.4173688+01:00","level":"INFO","msg":"writer: Close: closed","stream_id":"dxtn88y4"}
+{"time":"2025-03-28T08:45:26.4173688+01:00","level":"INFO","msg":"stream: closed","id":"dxtn88y4"}
