@@ -53,9 +53,20 @@ def evaluate(model_path, data_path):
             labels = labels.to(device)
 
             outputs = model(images)
+
+            # Standard argmax predictions (threshold = 0.5 equivalent)
             _, predicted = torch.max(outputs, 1)
 
             all_preds.extend(predicted.cpu().numpy())
+
+            # ===== Threshold-basierte Vorhersage =====
+            probs = torch.nn.functional.softmax(outputs, dim=1)
+            thresh_pred = (probs[:, 1] >= 0.35).long()  # Klasse "Parasitized" = Index 1
+            if 'thresh_preds_all' not in locals():
+                thresh_preds_all = []
+            thresh_preds_all.extend(thresh_pred.cpu().numpy())
+
+
             all_labels.extend(labels.cpu().numpy())
 
     # == Ausgabe der Metriken ==
@@ -64,6 +75,12 @@ def evaluate(model_path, data_path):
 
     print("=== Confusion Matrix ===")
     print(confusion_matrix(all_labels, all_preds))
+
+    # == Evaluation mit angepasstem Threshold ==
+    print("\n******* AFTER ADJUSTING CALCULATED THRESHOLD (0.35) *******")
+    print(classification_report(all_labels, thresh_preds_all, target_names=["Uninfected", "Parasitized"], digits=4))
+    print(confusion_matrix(all_labels, thresh_preds_all))
+
 
 if __name__ == "__main__":
     args = parse_args()
