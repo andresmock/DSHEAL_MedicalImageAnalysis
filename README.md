@@ -23,15 +23,35 @@ take a look at: https://github.zhaw.ch/ADLS-Digital-Health/DSHEAL-FS25/blob/main
 
 ### Structured project directory
 ```
-├── data/                  # Sample data or processing scripts (NOT the entire dataset*)
-├── analysis/              # Scripts/Jupyter Notebooks for analysis
-├── src/                   # Main scripts for preprocessing, training, evaluation
-├── models/                # Saved model weights and architectures
-├── report/                # Final report and additional documentation
-├── requirements.txt       # List of dependencies
-├── README.md              # Instructions for running the project
-├── results/               # Logs, confusion matrices, performance charts
-└── LICENSE                # License file
+├── data/                       # Sample data or processing scripts (NOT the entire dataset)
+│   ├── data_loader.py              # Data loading and transformation
+│   ├── malaria_optuna.db           # Optuna study database
+├── analysis/                   # Jupyter notebooks and scripts for analysis
+│   ├── data_expd.ipynb             # Exploratory data analysis
+│   ├── hyperparam.ipynb            # Hyperparameter analysis
+│   ├── LIME_explanation.py         # LIME exploration script
+│   ├── threshold_analysis.ipynb    # Threshold decision analysis
+├── src/                        # Main scripts for training and evaluation
+│   ├── evaluate.py                 # Evaluate the best model
+│   ├── hyperparam_search.py        # Hyperparameter tuning with Optuna
+│   ├── test_model.py               # Model testing script
+│   ├── train_model_cv.py           # Model training with K-Fold cross-validation
+│   ├── train_model.py              # Model training with predefined split
+├── models/                     # Saved model weights and architectures
+│   ├── best_malaria_model_*        # Best model from each run
+│   ├── malaria_model_1.py          # Base model
+│   ├── malaria_model_flex.py       # Flexible model, configurable via Optuna
+├── report/                     # Final report and related documentation
+│   ├── analysis_plots/             # Plots from exploratory and performance analysis
+│   ├── performance_plots/          # Visualizations from Weights & Biases
+├── requirements.txt            # List of Python dependencies
+├── README.md                   # Instructions for using the project
+├── results/                    # Evaluation results
+│   ├── evaluation_best_*           # Evaluation outputs per model
+├── wandb/                      # Weights & Biases log directory
+│   ├── run-*                       # Logs for each training run
+└── LICENSE                     # License file
+
 ```
 
 ## Dataset details (source, preprocessing)

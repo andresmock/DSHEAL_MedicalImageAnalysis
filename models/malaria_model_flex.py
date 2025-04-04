@@ -23,7 +23,7 @@ class MalariaNetFlex(nn.Module):
 
         self.dropout = nn.Dropout(dropout)
 
-        # Berechne Flatten-Size dynamisch (128x128 Input)
+        # Calculate flatten size dynamically (128x128 input)
         flatten_size = (128 - 2) // 2  # Layer1 conv + pool
         flatten_size = (flatten_size - 3) // 2  # Layer2 conv + pool
         flatten_size = flatten_size * flatten_size * (num_filters * 2)
@@ -42,7 +42,7 @@ class MalariaNetFlex(nn.Module):
 
 
 if __name__ == "__main__":
-    # Test-Setup für dynamische Architektur
+    # Test setup for dynamic architecture
     model = MalariaNetFlex(num_filters=32, fc_size=128, dropout=0.3)
     print(model)
 
@@ -51,6 +51,6 @@ if __name__ == "__main__":
 
     x = torch.randn(32, 3, 128, 128)
     y = model(x)
-    print(f"🔍 Output-Shape: {y.shape}")
-    print(f"🔍 Optimizer: {optimizer}")
-    print(f"🔍 Loss-Funktion: {criterion}")
+    print(f"Output-Shape: {y.shape}")
+    print(f"Optimizer: {optimizer}")
+    print(f"Loss-Funktion: {criterion}")

@@ -6,6 +6,7 @@ from sklearn.metrics import classification_report, confusion_matrix
 from tqdm import tqdm
 import numpy as np
 import json
+import sys
 
 # python src\test_model.py --model_path models\___.pth
 
@@ -21,21 +22,20 @@ def evaluate_model(model_path, batch_size):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Evaluating on device: {device}")
 
-    # == Daten laden ==
+    # == load data ==
     current_dir = os.path.dirname(os.path.abspath(__file__))
     base_dir = os.path.dirname(current_dir)
     data_dir = os.path.join(base_dir, "data")
     models_dir = os.path.join(base_dir, "models")
     wandb_dir = os.path.join(base_dir, "wandb")
 
-    import sys
     sys.path.append(data_dir)
     sys.path.append(models_dir)
 
     from data_loader import create_dataloaders
     from malaria_model_1 import MalariaNet
 
-    # == Modell laden ==
+    # == load model ==
     model = MalariaNet(num_classes=2).to(device)
     model.load_state_dict(torch.load(model_path, map_location=device))
     model.eval()
@@ -65,12 +65,12 @@ def evaluate_model(model_path, batch_size):
             all_preds.extend(predicted.cpu().numpy())
             all_labels.extend(labels.cpu().numpy())
 
-    # == Auswertung ==
+    # == Evaluation ==
     report = classification_report(all_labels, all_preds, target_names=["Uninfected", "Parasitized"], digits=4)
     cm = confusion_matrix(all_labels, all_preds)
 
-    # == wandb-args aus JSON einlesen ==
-    run_id_part = model_filename.split("_")[-2]  # Beispiel: dxtn88y4
+    # == read wandb-args from JSON ==
+    run_id_part = model_filename.split("_")[-2]  # example: dxtn88y4
     wandb_run_folder = next((f for f in os.listdir(wandb_dir) if run_id_part in f), None)
 
     wandb_args_dict = {}
@@ -82,9 +82,9 @@ def evaluate_model(model_path, batch_size):
                 args_list = metadata.get("args", [])
                 wandb_args_dict = {args_list[i]: args_list[i+1] for i in range(0, len(args_list), 2)}
         except Exception as e:
-            print(f"⚠️ Fehler beim Einlesen der wandb-args: {e}")
+            print(f"Error when reading the wandb-args: {e}")
     else:
-        print(f"⚠️ Keine passende wandb-Run-ID für {model_filename} gefunden.")
+        print(f"No matching wandb-Run-ID found for {model_filename}.")
 
     # == In Datei schreiben ==
     with open(results_file, "w") as f:
@@ -101,7 +101,7 @@ def evaluate_model(model_path, batch_size):
         f.write("\n\n=== Confusion Matrix ===\n")
         f.write(np.array2string(cm))
 
-    print(f"Ergebnisse gespeichert unter: {results_file}")
+    print(f"Results saved under: {results_file}")
 
 if __name__ == "__main__":
     args = parse_args()

@@ -39,7 +39,7 @@ def setup_wandb(args):
         os.environ["WANDB_API_KEY"] = WANDB_API_KEY
         wandb.login()
     else:
-        print("⚠️ No W&B API-Key found! Training runs without W&B-Logging.")
+        print("No W&B API-Key found! Training runs without W&B-Logging.")
 
     # W&B-Run starten
     user = os.getenv("USERNAME") or os.getenv("USER") or "unknown"
@@ -60,7 +60,7 @@ def setup_wandb(args):
         f"_{run_id}"
     )
 
-    print(f"✅ W&B-Logging startet for user: {user} (Mode: {wandb_mode})")
+    print(f"W&B-Logging startet for user: {user} (Mode: {wandb_mode})")
     return wandb_mode, run_id
 
 def train_model(args, run_id):
@@ -96,14 +96,12 @@ def train_model(args, run_id):
         raise ValueError(f"Unbekannter Optimizer: {args.optimizer}")
 
     # Best Model Tracking
-    best_val_acc = 0.0  # Höchste Validierungsgenauigkeit bisher
+    best_val_acc = 0.0  # Highest validation accuracy to date
     best_model_path = None
-    # best_model_path = os.path.join(MODELS_DIR, "best_malaria_model.pth")
 
     early_stop_patience = args.early_stop
     epochs_no_improve = 0
 
-    # Hier nun die Aufrufe
     train_loader, val_loader, test_loader = create_dataloaders(
         aug_level=args.aug_level,
         batch_size=32
@@ -134,7 +132,6 @@ def train_model(args, run_id):
             correct += (predicted == labels).sum().item()
 
             progress_bar.set_postfix(loss=f"{loss.item():.4f}", acc=f"{100 * correct / total:.2f}%")
-            # wandb.log({"Train Loss": loss.item()})
 
         # Validation
         model.eval()
@@ -166,38 +163,38 @@ def train_model(args, run_id):
             "Validation Loss": val_loss
         })
 
-        print(f"✅ Epoch {epoch+1}/{args.num_epochs} | Loss: {running_loss/total:.4f} | Train Acc: {train_accuracy:.4f} | Val Acc: {val_accuracy:.4f}")
+        print(f"Epoch {epoch+1}/{args.num_epochs} | Loss: {running_loss/total:.4f} | Train Acc: {train_accuracy:.4f} | Val Acc: {val_accuracy:.4f}")
 
         # **Speichere das Modell nach jeder Epoche**
         epoch_model_path = os.path.join(RUN_DIR, f"malaria_model_epoch{epoch+1}.pth")
         torch.save(model.state_dict(), epoch_model_path)
-        print(f"💾 Model saved: {epoch_model_path}")
+        print(f"Model saved: {epoch_model_path}")
 
         # **Speichere NUR das beste Modell**
         if val_accuracy - best_val_acc > args.min_delta:
             epochs_no_improve = 0
             if best_model_path and os.path.exists(best_model_path):
                 os.remove(best_model_path)
-                print(f"🗑️ Deleted old best model: {best_model_path}")
+                print(f"Deleted old best model: {best_model_path}")
 
             best_val_acc = val_accuracy
             best_model_path = os.path.join(MODELS_DIR, f"best_malaria_model_{run_id}_epoch{epoch+1}.pth")
             torch.save(model.state_dict(), best_model_path)
-            print(f"🏆 Best model updated! (Validation Accuracy: {best_val_acc:.4f})")
+            print(f"Best model updated! (Validation Accuracy: {best_val_acc:.4f})")
 
         else:
             epochs_no_improve += 1
-            print(f"⏳ No improvement for {epochs_no_improve} epochs.")
+            print(f"No improvement for {epochs_no_improve} epochs.")
 
             if epochs_no_improve >= early_stop_patience:
-                print(f"⛔ Early stopping triggered after {epoch+1} epochs.")
+                print(f"Early stopping triggered after {epoch+1} epochs.")
                 break
 
-    print(f"🎉 Training finished! best model saved: {best_model_path}")
+    print(f"Training finished! best model saved: {best_model_path}")
 
     MODEL_PATH = os.path.join(RUN_DIR, f"malaria_model_{args.num_epochs}epochs.pth")
     torch.save(model.state_dict(), MODEL_PATH)
-    print(f"🎉 Model saved: {MODEL_PATH}")
+    print(f"Model saved: {MODEL_PATH}")
 
     wandb.finish()
 

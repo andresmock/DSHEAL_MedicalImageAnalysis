@@ -3,20 +3,20 @@ from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 from collections import Counter
 
-# Funktion zum Laden des Datenpfads aus `data_path.txt`
+# Function for loading the data path from `data_path.txt`.
 def get_data_path(filepath=os.path.join(os.path.dirname(__file__), "../data_path.txt")):
     try:
         with open(filepath, "r") as f:
-            return f.readline().strip()  # Entfernt Leerzeichen/Zeilenumbrüche
+            return f.readline().strip()  
     except FileNotFoundError:
         raise FileNotFoundError(f"Die Datei '{filepath}' wurde nicht gefunden! Stelle sicher, dass sie existiert.")
 
-# Datenpfad aus `data_path.txt`
+# Datapath from `data_path.txt`
 data_dir = get_data_path()
 
 print(f"Used data path: {data_dir}")
 
-# Daten-Transformationen 
+# Data-Transformation 
 def get_train_transform(aug_level="basic"):
     if aug_level == "strong":
         return transforms.Compose([
@@ -45,18 +45,18 @@ def get_train_transform(aug_level="basic"):
 
 val_test_transform = transforms.Compose([
 
-    transforms.Resize((128, 128)),                  # Bilder auf 128x128 skalieren
-    transforms.ToTensor(),                           # In PyTorch-Tensor umwandeln
+    transforms.Resize((128, 128)),                   # Scale images to 128x128
+    transforms.ToTensor(),                           # Convert to PyTorch tensor
     transforms.Normalize(mean=[0.529, 0.424, 0.453],
-                          std=[0.332, 0.268, 0.282])  # Normalisieren auf -1 bis 1
+                          std=[0.332, 0.268, 0.282]) # Normalize to -1 to 1
 
 ])
 
 def create_dataloaders(aug_level="basic", batch_size=32):
-    # Erstelle das passende Transform für das Training
+    # Create the right transform for the training
     train_dataset = datasets.ImageFolder(
         root=os.path.join(data_dir, "train"),
-        transform=get_train_transform(aug_level)  # <-- nutze aug_level!
+        transform=get_train_transform(aug_level)  
     )
     
     # Validation & Test unverändert
@@ -69,31 +69,20 @@ def create_dataloaders(aug_level="basic", batch_size=32):
         transform=val_test_transform
     )
 
-    # Erstelle jetzt die DataLoader
+    # create the DataLoader
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
     val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
     return train_loader, val_loader, test_loader
 
-# Datasets für Training, Validierung und Test
+# Datasets for training, validation and testing
 """
-Beim Laden mit datasets.ImageFolder() erkennt PyTorch automatisch die Unterordner als Klassen.
-Die Reihenfolge der Ordner bestimmt die Label-Zuordnung
-(Parasitized/) wird 0
-(Uninfected/) wird 1
-PyTorch's ImageFolder() ordnet die Labels alphabetisch nach den Ordnernamen
-"""
-
-"""
-train_dataset = datasets.ImageFolder(root=os.path.join(data_dir, "train"), transform=get_train_transform("basic"))
-val_dataset = datasets.ImageFolder(root=os.path.join(data_dir, "val"), transform=val_test_transform)
-test_dataset = datasets.ImageFolder(root=os.path.join(data_dir, "test"), transform=val_test_transform)
-
-# DataLoader für Batches
-train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
-val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False)
-test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)
+When loading with datasets.ImageFolder(), PyTorch automatically recognizes the subfolders as classes.
+The order of the folders determines the label assignment
+(Parasitized/) becomes 0
+(Uninfected/) becomes 1
+PyTorch's ImageFolder() arranges the labels alphabetically according to the folder names
 """
 
 train_dataset_raw = datasets.ImageFolder(root=os.path.join(data_dir, "train"), transform=None)
@@ -101,12 +90,11 @@ val_dataset_raw = datasets.ImageFolder(root=os.path.join(data_dir, "val"), trans
 test_dataset_raw = datasets.ImageFolder(root=os.path.join(data_dir, "test"), transform=None)
 
 if __name__ == "__main__":
-    # Test: Anzahl Bilder pro Datensatz
-    print(f"📊 Anzahl Bilder im Trainingssatz: {len(train_dataset)}")
-    print(f"📊 Anzahl Bilder im Validierungssatz: {len(val_dataset)}")
-    print(f"📊 Anzahl Bilder im Testsatz: {len(test_dataset)}")
+    # Test: Number of images per dataset
+    print(f"Number of training images: {len(train_dataset)}")
+    print(f"Number of validation images: {len(val_dataset)}")
+    print(f"Number of test images: {len(test_dataset)}")
     
-    # Test: Lade eine Beispiel-Batch
+    # Test: Load a sample batch
     images, labels = next(iter(train_loader))
-    print(f"✅ Geladene Batch Grösse: {images.shape}, Labels: {labels}")
-
+    print(f"Loaded batch size: {images.shape}, Labels: {labels}")

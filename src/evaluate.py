@@ -28,17 +28,17 @@ def evaluate(model_path, data_path):
     sys.path.append(data_dir)
     sys.path.append(models_dir)
 
-    # == Importiere lokale Module ==
+    # == Import local modules ==
     from data_loader import create_dataloaders
     from malaria_model_1 import MalariaNet
 
-    # == Modell laden ==
+    # == Load model ==
     model = MalariaNet(num_classes=2).to(device)
     model.load_state_dict(torch.load(model_path, map_location=device))
     model.eval()
     print(f" Loaded model: {model_path}")
 
-    # == Daten laden ==
+    # == Load Data ==
     train_loader, val_loader, test_loader = create_dataloaders(
         aug_level="none",
         batch_size=32
@@ -59,9 +59,9 @@ def evaluate(model_path, data_path):
 
             all_preds.extend(predicted.cpu().numpy())
 
-            # ===== Threshold-basierte Vorhersage =====
+            # ===== Threshold-based prediction =====
             probs = torch.nn.functional.softmax(outputs, dim=1)
-            thresh_pred = (probs[:, 1] >= 0.35).long()  # Klasse "Parasitized" = Index 1
+            thresh_pred = (probs[:, 1] >= 0.35).long()  # class "Parasitized" = Index 1
             if 'thresh_preds_all' not in locals():
                 thresh_preds_all = []
             thresh_preds_all.extend(thresh_pred.cpu().numpy())
@@ -69,18 +69,17 @@ def evaluate(model_path, data_path):
 
             all_labels.extend(labels.cpu().numpy())
 
-    # == Ausgabe der Metriken ==
+    # == Output of the metrics ==
     print("\n=== Classification Report ===")
     print(classification_report(all_labels, all_preds, target_names=["Uninfected", "Parasitized"], digits=4))
 
     print("=== Confusion Matrix ===")
     print(confusion_matrix(all_labels, all_preds))
 
-    # == Evaluation mit angepasstem Threshold ==
+    # == Evaluation with adjusted threshold ==
     print("\n******* AFTER ADJUSTING CALCULATED THRESHOLD (0.35) *******")
     print(classification_report(all_labels, thresh_preds_all, target_names=["Uninfected", "Parasitized"], digits=4))
     print(confusion_matrix(all_labels, thresh_preds_all))
-
 
 if __name__ == "__main__":
     args = parse_args()

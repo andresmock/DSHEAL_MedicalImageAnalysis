@@ -13,7 +13,7 @@ def main():
     args = parser.parse_args()
 
     def objective(trial):
-        # Vorschlag neuer Hyperparameter durch Optuna
+        # Hyperparameter for Optuna
         lr = trial.suggest_float("lr", 1e-5, 1e-2, log=True)
         momentum = trial.suggest_float("momentum", 0.5, 0.99)
         batch_size = trial.suggest_categorical("batch_size", [16, 32, 64])
@@ -24,7 +24,7 @@ def main():
         dropout = trial.suggest_float("dropout", 0.0, 0.0) # 0.0, 0.5
         weight_decay = trial.suggest_float("weight_decay", 0, 0) # 1e-6, 1e-2, log=True
 
-        # Aufruf des Trainingsskripts mit den vorgeschlagenen Parametern
+        # Calling up the training script with the suggested parameters
         command = [
             "python", "src/train_model_cv.py",
             "--num_epochs", str(args.num_epochs),
@@ -43,46 +43,46 @@ def main():
         ]
 
         try:
-            # Starte den übergebenen Befehl als Subprozess und leite stdout und stderr zusammen weiter
+            # Start the transferred command as a subprocess and forward stdout and stderr together
             process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
             
-            output_lines = []  # Liste zum Speichern aller Ausgaben des Subprozesses
+            output_lines = []  # List for saving all outputs of the sub-process
             for line in process.stdout:
-                print(line, end="") # (für Live-Feedback)
-                output_lines.append(line) # Speichert die Zeile für spätere Auswertung
+                print(line, end="") # (Live-Feedback)
+                output_lines.append(line) # Saves the line for later evaluation
 
-            process.wait() # Warte, bis der Prozess vollständig abgeschlossen ist
+            process.wait()
 
-            # Prüfen, ob durch Optuna gepruned wurde
-            # Wenn der Rückgabewert 75 ist, wurde der Versuch durch Optuna explizit als "pruned" markiert
+            # Check whether pruned by Optuna
+            # If the return value is 75, the attempt was explicitly marked as “pruned” by Optuna
             if process.returncode == 75:
                 raise optuna.exceptions.TrialPruned()
 
-            # Durchsuche die Ausgabezeilen nach VAL_ACCURACIES_LOG (eine Liste der Validierungs-Genauigkeiten je Epoche)
+            # Search the output lines for VAL_ACCURACIES_LOG (a list of validation accuracies per epoch)
             for line in output_lines:
                 if "VAL_ACCURACIES_LOG" in line:
-                    # Extrahiere die Genauigkeiten als Liste von floats
+                    # Extract the accuracies as a list of floats
                     val_accs = [float(a) for a in line.strip().split(":")[-1].split(",")]
 
-                    # Berichte jeder dieser Genauigkeiten an Optuna (z. B. zur späteren Analyse oder Pruning-Entscheidung)
+                    # Reports each of these accuracies to Optuna
                     for i, acc in enumerate(val_accs):
-                        trial.report(acc, step=i) # Reporte die Accuracy bei Epoche 
+                        trial.report(acc, step=i) # Reports the Accuracy at Epoch
 
-                        # Prüfe, ob das aktuelle Trial basierend auf den bisherigen Resultaten gestoppt werden soll
+                        # Whether the current trial should be stopped based on the results to date
                         if trial.should_prune():
                             print(f"Trial {trial.number} has been pruned in Epoch {i+1}.")
-                            raise optuna.exceptions.TrialPruned() # Breche das Trial vorzeitig ab
+                            raise optuna.exceptions.TrialPruned() # Abort the trial prematurely
                         
-                # Falls "Average Validation Accuracy" in einer Zeile gefunden wird, versuche den float-Wert zu extrahieren
+                # If "Average Validation Accuracy" is found in a line, try to extract the float value
                 if "Average Validation Accuracy" in line:
                     try:
                         acc = float(line.strip().split(":")[-1])
-                        return acc # Rückgabe der finalen Validierungsgenauigkeit als Optimierungsziel
+                        return acc # Return of the final validation accuracy as an optimization target
                     except ValueError:
                         pass 
 
         except Exception as e:
-            print("Fehler beim Training:")
+            print("Mistakes during training:")
             print(e)
             return 0.0
 

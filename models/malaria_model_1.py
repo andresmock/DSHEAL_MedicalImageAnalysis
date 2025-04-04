@@ -47,13 +47,13 @@ if __name__ == "__main__":
     # Test: Loss-Funktion
     x = torch.randn(32, 3, 128, 128)
     y = model(x)
-    print(f"🔍 Output-Shape: {y.shape}")
+    print(f"Output-Shape: {y.shape}")
 
     # Test: Optimizer
-    print(f"🔍 Optimizer: {optimizer}")
+    print(f"Optimizer: {optimizer}")
 
     # Test: Loss-Funktion
-    print(f"🔍 Loss-Funktion: {criterion}")
+    print(f"Loss-Funktion: {criterion}")
 
     # Test: Parameter
-    print(f"🔍 Model-Parameter: {model.parameters}")
+    print(f"Model-Parameter: {model.parameters}")
