@@ -14,12 +14,32 @@ Medical Image Analysis - Malaria Detection Using Blood Smear Images
 - [Model Performance Summary](#model-performance-summary)
 - [Team Members and Contributions](#team-members-and-contributions)
 
+
+---
+
+
 ## Task
 take a look at: https://github.zhaw.ch/ADLS-Digital-Health/DSHEAL-FS25/blob/main/project/assignment.md
 
 
+---
 
-## Short project description (abstract)
+
+## Short Project Description (Abstract)
+
+This project focuses on classifying blood smear images to detect malaria-infected cells using Convolutional Neural Networks (CNNs). The dataset used is publicly available on Kaggle and contains pre-split images labeled as either *Parasitized* or *Uninfected*.
+
+We first implemented a simple baseline CNN, which already achieved strong performance using the default train/val/test split. To explore potential improvements, we developed a more flexible CNN architecture with support for K-Fold cross-validation and hyperparameter optimization via Optuna. However, these enhancements did not significantly improve the results, indicating that the original dataset split and model complexity were already sufficient.
+
+We also tested different levels of data augmentation (`none`, `basic`, `strong`) during training. While useful for experimentation, these variations showed little impact on final model performance.
+
+A key insight came from our threshold analysis (`threshold_analysis.ipynb`), where we evaluated the trade-off between false positives (FP) and false negatives (FN). Since false negatives carry a higher risk in medical diagnostics, we adjusted the model’s decision threshold from 0.50 to 0.35. This reduced FN from 48 to 33 with a reasonable increase in FP, resulting in a more appropriate balance for malaria detection use cases.
+
+The script `evaluate.py` evaluates the best-performing model and reports results for both:
+- the standard threshold of 0.50
+- the adjusted threshold of 0.35 (predefined based on prior analysis)
+
+All code, trained models, and analysis results are included for full reproducibility.
 
 
 ### Structured project directory
@@ -55,7 +75,9 @@ take a look at: https://github.zhaw.ch/ADLS-Digital-Health/DSHEAL-FS25/blob/main
 └── README.md                   # Project overview and usage instructions
 ```
 
+
 ---
+
 
 ## Dataset Details (Source & Statistics)
 
@@ -89,7 +111,9 @@ Calculated across all train, validation, and test images:
 
 These values were used to normalize images during preprocessing.
 
+
 ---
+
 
 ## Data Preprocessing
 
@@ -131,6 +155,9 @@ This path is automatically loaded via a utility function to keep code clean and 
 > `train_loader, val_loader, test_loader = create_dataloaders(aug_level="basic", batch_size=32)`
 
 
+---
+
+
 ## Installation and usage instructions
 ### Data download
 1. Download the dataset from: https://www.kaggle.com/datasets/maestroalert/malaria-split-dataset/data
@@ -159,6 +186,10 @@ conda env create --file env.yaml
 conda activate DSHEAL_proj1_GaMo
 ```
 
+
+---
+
+
 ## Evaluation
 To evaluate the best model (or alternatively test all models in the models/ directory), run:
 ```
@@ -166,7 +197,47 @@ python src\evaluate.py --data_path "your_data_path/data"
 ```
 Replace "your_data_path/data" with the actual path to your dataset.
 
+
+---
+
+
 ## Model performance summary
+
+Evaluation Results for model: best_malaria_model_attmy8cd_epoch7
+
+=== wandb ARGS ===
+--aug_level: basic
+
+=== Classification Report ===
+              precision    recall  f1-score   support
+
+  Uninfected     0.9640    0.9339    0.9487      1377
+ Parasitized     0.9360    0.9652    0.9503      1378
+
+    accuracy                         0.9495      2755
+   macro avg     0.9500    0.9495    0.9495      2755
+weighted avg     0.9500    0.9495    0.9495      2755
+
+=== Confusion Matrix ===
+[[1286   91]
+ [  48 1330]]
+
+*** AFTER ADJUSTING CALCULATED THRESHOLD (0.35) ****
+              precision    recall  f1-score   support
+
+  Uninfected     0.9746    0.9187    0.9458      1377
+ Parasitized     0.9231    0.9761    0.9489      1378
+
+    accuracy                         0.9474      2755
+   macro avg     0.9489    0.9474    0.9473      2755
+weighted avg     0.9488    0.9474    0.9473      2755
+
+[[1265  112]
+ [  33 1345]]
+
+
+---
+
 
 ## Team members and contributions
 **Mike Gasser**  
