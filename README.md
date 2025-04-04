@@ -150,7 +150,7 @@ This path is automatically loaded via a utility function to keep code clean and 
 
 ---
 
-> 📌 Example:  
+> Example:  
 > You can create all data loaders by calling:  
 > `train_loader, val_loader, test_loader = create_dataloaders(aug_level="basic", batch_size=32)`
 
@@ -201,39 +201,55 @@ Replace "your_data_path/data" with the actual path to your dataset.
 ---
 
 
-## Model performance summary
+## Model Performance Summary
 
-Evaluation Results for model: best_malaria_model_attmy8cd_epoch7
+**Evaluated Model:** `best_malaria_model_attmy8cd_epoch7`  
+**Augmentation Level:** `basic`  
+**Evaluation Set:** Test Set (2,755 images)
 
-=== wandb ARGS ===
---aug_level: basic
+### Classification Report (Threshold = 0.50)
 
-=== Classification Report ===
-              precision    recall  f1-score   support
+| Class        | Precision | Recall | F1-Score | Support |
+|--------------|-----------|--------|----------|---------|
+| Uninfected   | 0.9640    | 0.9339 | 0.9487   | 1377    |
+| Parasitized  | 0.9360    | 0.9652 | 0.9503   | 1378    |
+| **Accuracy** |           |        | **0.9495** | **2755** |
+| **Macro avg**| 0.9500    | 0.9495 | 0.9495   | 2755    |
+| **Weighted avg** | 0.9500 | 0.9495 | 0.9495   | 2755    |
 
-  Uninfected     0.9640    0.9339    0.9487      1377
- Parasitized     0.9360    0.9652    0.9503      1378
+**Confusion Matrix (Threshold = 0.50):**
 
-    accuracy                         0.9495      2755
-   macro avg     0.9500    0.9495    0.9495      2755
-weighted avg     0.9500    0.9495    0.9495      2755
+- True Positives (TP, Parasitized correctly classified): 1330  
+- True Negatives (TN, Uninfected correctly classified): 1286  
+- False Positives (FP, Uninfected misclassified as Parasitized): 91  
+- **False Negatives (FN, Parasitized missed): 48**  
 
-=== Confusion Matrix ===
-[[1286   91]
- [  48 1330]]
+---
 
-*** AFTER ADJUSTING CALCULATED THRESHOLD (0.35) ****
-              precision    recall  f1-score   support
+### Classification Report (Adjusted Threshold = 0.35)
 
-  Uninfected     0.9746    0.9187    0.9458      1377
- Parasitized     0.9231    0.9761    0.9489      1378
+| Class        | Precision | Recall | F1-Score | Support |
+|--------------|-----------|--------|----------|---------|
+| Uninfected   | 0.9746    | 0.9187 | 0.9458   | 1377    |
+| Parasitized  | 0.9231    | 0.9761 | 0.9489   | 1378    |
+| **Accuracy** |           |        | **0.9474** | **2755** |
+| **Macro avg**| 0.9489    | 0.9474 | 0.9473   | 2755    |
+| **Weighted avg** | 0.9488 | 0.9474 | 0.9473   | 2755    |
 
-    accuracy                         0.9474      2755
-   macro avg     0.9489    0.9474    0.9473      2755
-weighted avg     0.9488    0.9474    0.9473      2755
+**Confusion Matrix (Threshold = 0.35):**
 
-[[1265  112]
- [  33 1345]]
+- True Positives (TP): 1345  
+- True Negatives (TN): 1265  
+- False Positives (FP): 112  
+- **False Negatives (FN): 33**  
+
+---
+
+### Interpretation
+
+Adjusting the classification threshold from 0.50 to 0.35 significantly reduced the number of false negatives (from 48 to 33), which is crucial for medical diagnostics like malaria detection. Although this led to a slight increase in false positives (from 91 to 112), the overall accuracy remained high and nearly unchanged (~94.7%).
+
+This trade-off aligns the model’s behavior with real-world priorities, where missing a malaria case is considered more critical than a false alarm.
 
 
 ---
