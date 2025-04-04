@@ -5,7 +5,8 @@ Medical Image Analysis - Malaria Detection Using Blood Smear Images
 - [Task](#task)
 - [Short Project Description (Abstract)](#short-project-description-abstract)
 - [Structured Project Directory](#structured-project-directory)
-- [Dataset Details (Source, Preprocessing)](#dataset-details-source-preprocessing)
+- [Dataset Details (Source & Statistics)](#dataset-details-source--statistics)
+- [Data Preprocessing](#data-preprocessing)
 - [Installation and Usage Instructions](#installation-and-usage-instructions)
   - [Data Download](#data-download)
   - [Environment Management: Setting up the Environment](#environment-management-setting-up-the-environment)
@@ -49,13 +50,85 @@ take a look at: https://github.zhaw.ch/ADLS-Digital-Health/DSHEAL-FS25/blob/main
 ├── results/                    # Evaluation results
 │   ├── evaluation_best_*           # Evaluation outputs per model
 ├── wandb/                      # Weights & Biases log directory
-│   ├── run-*                       # Logs for each training run
-└── LICENSE                     # License file
-
+├── env.yaml                    # Conda environment definition file
+├── LICENSE                     # License file
+└── README.md                   # Project overview and usage instructions
 ```
 
-## Dataset details (source, preprocessing)
-source: https://www.kaggle.com/datasets/maestroalert/malaria-split-dataset/data
+---
+
+## Dataset Details (Source & Statistics)
+
+The dataset used in this project is publicly available on Kaggle:  
+https://www.kaggle.com/datasets/maestroalert/malaria-split-dataset/data
+
+It contains cell images labeled as either **Parasitized** or **Uninfected**, already split into training, validation, and test sets.
+
+### File Type Summary
+- Total image files: **27,558**
+- Format: `.png` only
+
+### Number of Images per Class
+| Set        | Parasitized | Uninfected | Total  |
+|------------|-------------|------------|--------|
+| Train      | 11,024      | 11,024     | 22,048 |
+| Validation | 1,378       | 1,377      | 2,755  |
+| Test       | 1,377       | 1,378      | 2,755  |
+| **Total**  | **13,779**  | **13,779** | **27,558** |
+
+### Image Dimension Analysis
+- Images vary in size, with most clustered around **128×128 pixels**.
+- Resizing to **128×128** was chosen for model input consistency.
+- (See plots in `analysis/data_expd.ipynb` for more details.)
+
+### RGB Mean & Std (All Sets Combined)
+Calculated across all train, validation, and test images:
+
+- **Mean:** `[0.5295, 0.4239, 0.4530]`
+- **Std:** `[0.3323, 0.2682, 0.2821]`
+
+These values were used to normalize images during preprocessing.
+
+---
+
+## Data Preprocessing
+
+Before feeding the images into the neural network, a set of preprocessing and transformation steps is applied to ensure consistent input dimensions and improve model generalization.
+
+### Common Preprocessing Steps (All Sets)
+- **Resize:** All images are resized to **128×128 pixels** to standardize input dimensions.
+- **Normalization:** Images are normalized using the RGB mean and standard deviation computed over the entire dataset:
+  - `mean = [0.529, 0.424, 0.453]`
+  - `std = [0.332, 0.268, 0.282]`
+  - This scales pixel values to approximately the range [-1, 1].
+
+### Data Augmentation (Train Set Only)
+To improve generalization and prevent overfitting, several augmentation strategies can be applied to the training set via the `aug_level` parameter:
+
+| Augmentation Level | Transformations Applied                                                                       |
+|--------------------|-----------------------------------------------------------------------------------------------|
+| `none`             | Resize → ToTensor → Normalize                                                                 |
+| `basic` *(default)*| Resize → RandomHorizontalFlip → RandomRotation(+-15°) → ToTensor → Normalize                  |
+| `strong`           | Resize → RandomHorizontalFlip/VerticalFlip → RandomRotation(+-180°) → ColorJitter → Normalize |
+
+These options can be set via the `get_train_transform()` function.
+
+### Dataloader Setup
+- Images are loaded using `torchvision.datasets.ImageFolder()`, which automatically assigns:
+  - `0 = Parasitized` (based on folder name)
+  - `1 = Uninfected`
+- Data is then wrapped into PyTorch `DataLoader` objects with batching and shuffling enabled (for training).
+- Validation and test sets are never augmented and use only resizing and normalization.
+
+### Data Path Handling
+The dataset root path is stored in a separate `data_path.txt` file (not tracked by Git).  
+This path is automatically loaded via a utility function to keep code clean and portable.
+
+---
+
+> 📌 Example:  
+> You can create all data loaders by calling:  
+> `train_loader, val_loader, test_loader = create_dataloaders(aug_level="basic", batch_size=32)`
 
 
 ## Installation and usage instructions
