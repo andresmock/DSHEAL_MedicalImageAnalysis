@@ -1,0 +1,35 @@
+{
+  "os":  "Windows-10-10.0.26100-SP0",
+  "python":  "CPython 3.11.11",
+  "startedAt":  "2025-03-28T07:51:29.553909Z",
+  "args":  [
+    "--aug_level",
+    "none"
+  ],
+  "program":  "C:\\Users\\andre\\Desktop\\git_repository_zhaw\\DSHEAL_project_FS25_GaMo\\src\\train_model.py",
+  "codePath":  "src\\train_model.py",
+  "git":  {
+    "remote":  "https://github.zhaw.ch/mockand1/DSHEAL_project_FS25_GaMo.git",
+    "commit":  "a92fb9c962eaf8d3be16f65f66b48ceba5b77e09"
+  },
+  "email":  "mockand1@students.zhaw.ch",
+  "root":  "C:\\Users\\andre\\Desktop\\git_repository_zhaw\\DSHEAL_project_FS25_GaMo",
+  "host":  "DESKTOP-NIKN0M7",
+  "executable":  "C:\\Users\\andre\\anaconda3\\envs\\DSHEAL_proj1_GaMo\\python.exe",
+  "codePathLocal":  "src\\train_model.py",
+  "cpu_count":  4,
+  "cpu_count_logical":  8,
+  "disk":  {
+    "/":  {
+      "total":  "510362906624",
+      "used":  "288525500416"
+    }
+  },
+  "memory":  {
+    "total":  "16942501888"
+  },
+  "cpu":  {
+    "count":  4,
+    "countLogical":  8
+  }
+}

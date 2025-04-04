@@ -1,0 +1,22 @@
+Evaluation Results for model: best_malaria_model_dxtn88y4_epoch5
+
+=== wandb ARGS ===
+--lr: 0.009966
+--momentum: 0.746802
+--optimizer: sgd
+--aug_level: none
+
+=== Classification Report ===
+              precision    recall  f1-score   support
+
+  Uninfected     0.9716    0.9194    0.9448      1377
+ Parasitized     0.9236    0.9731    0.9477      1378
+
+    accuracy                         0.9463      2755
+   macro avg     0.9476    0.9463    0.9462      2755
+weighted avg     0.9476    0.9463    0.9462      2755
+
+
+=== Confusion Matrix ===
+[[1266  111]
+ [  37 1341]]

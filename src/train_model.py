@@ -12,9 +12,17 @@ def parse_args():
     parser.add_argument("--num_epochs", type=int, default=10, help="Number of Epochs")
     parser.add_argument("--lr", type=float, default=0.001, help="Learning Rate")
     parser.add_argument("--momentum", type=float, default=0.9, help="Momentum for SGD")
+    parser.add_argument("--early_stop", type=int, default=3, help="Patience for early stopping")
+    parser.add_argument("--min_delta", type=float, default=1e-3, help="Minimum delta for early stopping")
+    parser.add_argument("--aug_level", type=str, default="basic",
+                        choices=["none", "basic", "strong"],
+                        help="Data augmentation level (none|basic|strong)")
+    parser.add_argument("--optimizer", type=str, default="sgd",
+                        choices=["sgd", "adam"],
+                        help="Which optimizer to use: sgd or adam")
     return parser.parse_args()
 
-def setup_wandb():
+def setup_wandb(args):
     WANDB_API_KEY = None
     login_file = os.path.join(os.path.dirname(__file__), ".wandb_login")
 
@@ -43,7 +51,14 @@ def setup_wandb():
     )
 
     run_id = wandb.run.id if wandb.run else f"offline-{user}"
-    wandb.run.name = f"MalariaNet_{user}_{run_id}"
+    wandb.run.name = (
+        f"MalariaNet_e{args.num_epochs}"
+        f"_lr{args.lr}"
+        f"_m{args.momentum}"
+        f"_aug{args.aug_level}"
+        f"_opt{args.optimizer}"
+        f"_{run_id}"
+    )
 
     print(f"✅ W&B-Logging startet for user: {user} (Mode: {wandb_mode})")
     return wandb_mode, run_id
@@ -58,21 +73,42 @@ def train_model(args, run_id):
     sys.path.append(DATA_DIR)
     sys.path.append(MODELS_DIR)
 
-    from data_loader import train_loader, val_loader
+    from data_loader import create_dataloaders
     from malaria_model_1 import MalariaNet
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"runs with: {device}")
 
+    wandb.config.update({
+        "num_epochs": args.num_epochs,
+        "learning_rate": args.lr,
+        "momentum": args.momentum,
+        "early_stop": args.early_stop
+    })
+
     model = MalariaNet(num_classes=2).to(device)
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
+    if args.optimizer.lower() == "sgd":
+        optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
+    elif args.optimizer.lower() == "adam":
+        optimizer = optim.Adam(model.parameters(), lr=args.lr)
+    else:
+        raise ValueError(f"Unbekannter Optimizer: {args.optimizer}")
 
     # Best Model Tracking
     best_val_acc = 0.0  # Höchste Validierungsgenauigkeit bisher
     best_model_path = None
     # best_model_path = os.path.join(MODELS_DIR, "best_malaria_model.pth")
 
+    early_stop_patience = args.early_stop
+    epochs_no_improve = 0
+
+    # Hier nun die Aufrufe
+    train_loader, val_loader, test_loader = create_dataloaders(
+        aug_level=args.aug_level,
+        batch_size=32
+    )
+    
     # Training loop with tqdm & W&B logging
     for epoch in range(args.num_epochs):
         model.train()
@@ -138,7 +174,8 @@ def train_model(args, run_id):
         print(f"💾 Model saved: {epoch_model_path}")
 
         # **Speichere NUR das beste Modell**
-        if val_accuracy > best_val_acc:
+        if val_accuracy - best_val_acc > args.min_delta:
+            epochs_no_improve = 0
             if best_model_path and os.path.exists(best_model_path):
                 os.remove(best_model_path)
                 print(f"🗑️ Deleted old best model: {best_model_path}")
@@ -147,6 +184,14 @@ def train_model(args, run_id):
             best_model_path = os.path.join(MODELS_DIR, f"best_malaria_model_{run_id}_epoch{epoch+1}.pth")
             torch.save(model.state_dict(), best_model_path)
             print(f"🏆 Best model updated! (Validation Accuracy: {best_val_acc:.4f})")
+
+        else:
+            epochs_no_improve += 1
+            print(f"⏳ No improvement for {epochs_no_improve} epochs.")
+
+            if epochs_no_improve >= early_stop_patience:
+                print(f"⛔ Early stopping triggered after {epoch+1} epochs.")
+                break
 
     print(f"🎉 Training finished! best model saved: {best_model_path}")
 
@@ -158,5 +203,5 @@ def train_model(args, run_id):
 
 if __name__ == "__main__":
     args = parse_args()
-    wandb_mode, run_id = setup_wandb()
+    wandb_mode, run_id = setup_wandb(args)
     train_model(args, run_id)

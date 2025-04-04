@@ -1,0 +1,27 @@
+✅ W&B-Logging startet for user: andre (Mode: online)
+Used data path: C:\ZHAW_local\semester_6_local\DS in Health\project_work\data
+runs with: cpu
+🟢 Epoch 1/10: 100%|████████████████████████████████████████| 689/689 [03:53<00:00,  2.95it/s, acc=80.94%, loss=0.1816]
+✅ Epoch 1/10 | Loss: 0.0142 | Train Acc: 0.8094 | Val Acc: 0.9321
+💾 Model saved: C:\Users\andre\Desktop\git_repository_zhaw\DSHEAL_project_FS25_GaMo\models\run-95yj4yam\malaria_model_epoch1.pth
+🏆 Best model updated! (Validation Accuracy: 0.9321)
+🟢 Epoch 2/10: 100%|████████████████████████████████████████| 689/689 [03:02<00:00,  3.78it/s, acc=93.93%, loss=0.2504]
+✅ Epoch 2/10 | Loss: 0.0058 | Train Acc: 0.9393 | Val Acc: 0.9550
+💾 Model saved: C:\Users\andre\Desktop\git_repository_zhaw\DSHEAL_project_FS25_GaMo\models\run-95yj4yam\malaria_model_epoch2.pth
+🗑️ Deleted old best model: C:\Users\andre\Desktop\git_repository_zhaw\DSHEAL_project_FS25_GaMo\models\best_malaria_model_95yj4yam_epoch1.pth
+🏆 Best model updated! (Validation Accuracy: 0.9550)
+🟢 Epoch 3/10: 100%|████████████████████████████████████████| 689/689 [02:56<00:00,  3.90it/s, acc=94.52%, loss=0.0438]
+✅ Epoch 3/10 | Loss: 0.0053 | Train Acc: 0.9452 | Val Acc: 0.9394
+💾 Model saved: C:\Users\andre\Desktop\git_repository_zhaw\DSHEAL_project_FS25_GaMo\models\run-95yj4yam\malaria_model_epoch3.pth
+⏳ No improvement for 1 epochs.
+🟢 Epoch 4/10: 100%|████████████████████████████████████████| 689/689 [03:15<00:00,  3.52it/s, acc=94.57%, loss=0.0594]
+✅ Epoch 4/10 | Loss: 0.0051 | Train Acc: 0.9457 | Val Acc: 0.9546
+💾 Model saved: C:\Users\andre\Desktop\git_repository_zhaw\DSHEAL_project_FS25_GaMo\models\run-95yj4yam\malaria_model_epoch4.pth
+⏳ No improvement for 2 epochs.
+🟢 Epoch 5/10: 100%|████████████████████████████████████████| 689/689 [02:55<00:00,  3.93it/s, acc=94.86%, loss=0.0454]
+✅ Epoch 5/10 | Loss: 0.0048 | Train Acc: 0.9486 | Val Acc: 0.9528
+💾 Model saved: C:\Users\andre\Desktop\git_repository_zhaw\DSHEAL_project_FS25_GaMo\models\run-95yj4yam\malaria_model_epoch5.pth
+⏳ No improvement for 3 epochs.
+⛔ Early stopping triggered after 5 epochs.
+🎉 Training finished! best model saved: C:\Users\andre\Desktop\git_repository_zhaw\DSHEAL_project_FS25_GaMo\models\best_malaria_model_95yj4yam_epoch2.pth
+🎉 Model saved: C:\Users\andre\Desktop\git_repository_zhaw\DSHEAL_project_FS25_GaMo\models\run-95yj4yam\malaria_model_10epochs.pth
