@@ -9,8 +9,6 @@ Medical Image Analysis - Malaria Detection Using Blood Smear Images
 - [Data Preprocessing](#data-preprocessing)
 - [Model Performance Summary](#model-performance-summary)
 - [Installation and Usage Instructions](#installation-and-usage-instructions)
-  - [Data Download](#data-download)
-  - [Environment Management: Setting up the Environment](#environment-management-setting-up-the-environment)
 - [Evaluation](#evaluation)
 - [Team Members and Contributions](#team-members-and-contributions)
 
@@ -206,32 +204,55 @@ This trade-off aligns the model’s behavior with real-world priorities, where m
 ---
 
 
-## Installation and usage instructions
-### Data download
-1. Download the dataset from: https://www.kaggle.com/datasets/maestroalert/malaria-split-dataset/data
+## Installation and Usage Instructions
 
-After extraction, the directory structure should look like this:
-```
-├── your_data_path/data/ 
-    ├── test
-        ├── Parasitized
-        ├── Uninfected
-    ├── train
-        ├── Parasitized
-        ├── Uninfected
-    ├── val
-        ├── Parasitized
-        ├── Uninfected
+### 1. Clone the Repository
+
+Clone this repository and navigate into the project folder:
+
+```bash
+git clone https://github.zhaw.ch/mockand1/DSHEAL_project_FS25_GaMo.git
+cd DSHEAL_project_FS25_GaMo
 ```
 
-2. Replace `your_data_path` with the actual path to your data.
-3. Create a file named `data_path.txt` and store your local data path in it. (example: C:\ZHAW_local\project_work\data)
+### 2. Environment Setup (via Conda)
 
-### Environment Management: Setting up the Environment
-To create and activate the Conda environment from the `env.yaml` file, run:
-```
+Create and activate the Conda environment using the `env.yaml` file:
+
+```bash
 conda env create --file env.yaml
 conda activate DSHEAL_proj1_GaMo
+```
+
+### 3. Data Download and Setup
+
+1. Download the dataset from Kaggle:  
+   https://www.kaggle.com/datasets/maestroalert/malaria-split-dataset/data
+
+2. Extract the dataset so that the folder structure looks like this:
+
+```
+your_data_path/data/
+├── train/
+│   ├── Parasitized/
+│   └── Uninfected/
+├── val/
+│   ├── Parasitized/
+│   └── Uninfected/
+└── test/
+    ├── Parasitized/
+    └── Uninfected/
+```
+
+> Make sure the folders `train`, `val`, and `test` are directly inside the `data/` directory.  
+> You do **not** need to rename or rearrange the subfolders — they are already correctly labeled.
+
+3. Create a file named `data_path.txt` in the **root of the cloned repository** (`DSHEAL_project_FS25_GaMo`) and insert your local absolute path to the `data/` directory.
+
+Example content of `data_path.txt` (Windows):
+
+```
+C:\ZHAW_local\project_work\data
 ```
 
 
