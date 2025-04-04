@@ -1,0 +1,19 @@
+MIT License
+
+Copyright (c) 2025 Mike Gasser & Andres Mock
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software for educational and non-commercial purposes only, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+The dataset used in this project is from Kaggle:
+https://www.kaggle.com/datasets/maestroalert/malaria-split-dataset/data
+
+The dataset is provided by its original author under their respective license terms.
+We do not claim ownership of the dataset and include it here for academic use only.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
