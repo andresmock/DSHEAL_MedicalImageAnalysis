@@ -7,11 +7,11 @@ Medical Image Analysis - Malaria Detection Using Blood Smear Images
 - [Structured Project Directory](#structured-project-directory)
 - [Dataset Details (Source & Statistics)](#dataset-details-source--statistics)
 - [Data Preprocessing](#data-preprocessing)
-- [Evaluation](#evaluation)
 - [Model Performance Summary](#model-performance-summary)
 - [Installation and Usage Instructions](#installation-and-usage-instructions)
   - [Data Download](#data-download)
   - [Environment Management: Setting up the Environment](#environment-management-setting-up-the-environment)
+- [Evaluation](#evaluation)
 - [Team Members and Contributions](#team-members-and-contributions)
 
 
@@ -152,18 +152,6 @@ This path is automatically loaded via a utility function to keep code clean and 
 ---
 
 
-
-## Evaluation
-To evaluate the best model (or alternatively test all models in the models/ directory), run:
-```
-python src\evaluate.py --data_path "your_data_path/data"
-```
-Replace "your_data_path/data" with the actual path to your dataset.
-
-
----
-
-
 ## Model Performance Summary
 
 **Evaluated Model:** `best_malaria_model_attmy8cd_epoch7`  
@@ -237,7 +225,7 @@ After extraction, the directory structure should look like this:
 ```
 
 2. Replace `your_data_path` with the actual path to your data.
-3. Create a file named `data_path.txt` and store your local data path in it.
+3. Create a file named `data_path.txt` and store your local data path in it. (example: C:\ZHAW_local\project_work\data)
 
 ### Environment Management: Setting up the Environment
 To create and activate the Conda environment from the `env.yaml` file, run:
@@ -245,6 +233,17 @@ To create and activate the Conda environment from the `env.yaml` file, run:
 conda env create --file env.yaml
 conda activate DSHEAL_proj1_GaMo
 ```
+
+
+---
+
+
+## Evaluation
+To evaluate the best model (or alternatively test all models in the models/ directory), run:
+```
+python src\evaluate.py --data_path "your_data_path/data"
+```
+Replace "your_data_path/data" with the actual path to your dataset.
 
 
 ---
