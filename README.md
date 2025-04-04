@@ -148,12 +148,6 @@ These options can be set via the `get_train_transform()` function.
 The dataset root path is stored in a separate `data_path.txt` file (not tracked by Git).  
 This path is automatically loaded via a utility function to keep code clean and portable.
 
----
-
-> Example:  
-> You can create all data loaders by calling:  
-> `train_loader, val_loader, test_loader = create_dataloaders(aug_level="basic", batch_size=32)`
-
 
 ---
 
