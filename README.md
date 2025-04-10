@@ -25,17 +25,9 @@ take a look at: https://github.zhaw.ch/ADLS-Digital-Health/DSHEAL-FS25/blob/main
 
 ## Short Project Description (Abstract)
 
-This project focuses on classifying blood smear images to detect malaria-infected cells using Convolutional Neural Networks (CNNs). The dataset used is publicly available on Kaggle and contains pre-split images labeled as either *Parasitized* or *Uninfected*.
+Malaria is a life-threatening disease that continues to impact millions globally, particularly in regions with limited access to healthcare resources. Manual diagnosis through microscopic analysis of blood smear images is both time-consuming and heavily reliant on expert knowledge. In this project, we developed a convolutional neural network (CNN) to automate the classification of malaria-infected cells using a publicly available dataset. The dataset contained labeled images of parasitized and uninfected cells, which were preprocessed through resizing, normalization, and augmentation techniques to improve model generalization. Our baseline model achieved a classification accuracy of approximately 95\%, comparable to human expert performance.
 
-We first implemented a simple baseline CNN, which already achieved strong performance using the default train/val/test split. To explore potential improvements, we developed a more flexible CNN architecture with support for K-Fold cross-validation and hyperparameter optimization via Optuna. However, these enhancements did not significantly improve the results, indicating that the original dataset split and model complexity were already sufficient.
-
-We also tested different levels of data augmentation (`none`, `basic`, `strong`) during training. While useful for experimentation, these variations showed little impact on final model performance.
-
-A key insight came from our threshold analysis (`threshold_analysis.ipynb`), where we evaluated the trade-off between false positives (FP) and false negatives (FN). Since false negatives carry a higher risk in medical diagnostics, we adjusted the model’s decision threshold from 0.50 to 0.35. This reduced FN from 48 to 33 with a reasonable increase in FP, resulting in a more appropriate balance for malaria detection use cases.
-
-The script `evaluate.py` evaluates the best-performing model and reports results for both:
-- the standard threshold of 0.50
-- the adjusted threshold of 0.35 (predefined based on prior analysis)
+To enhance model reliability, we explored hyperparameter tuning and interpretability methods, including threshold adjustment and LIME (Local Interpretable Model-agnostic Explanations). While threshold tuning successfully reduced false negatives, a critical factor in clinical settings, visual explanations from LIME revealed limited visible differences between correct and incorrect predictions, highlighting the ongoing challenges in model interpretability. Despite these limitations, our findings demonstrate that lightweight CNNs can serve as effective diagnostic support tools. Future work should focus on incorporating more diverse datasets, applying transfer learning, and validating the model in real-world clinical environments.
 
 All code, trained models, and analysis results are included for full reproducibility.
 
